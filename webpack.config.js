@@ -25,9 +25,8 @@ module.exports = function makeWebpackConfig() {
 
     if (isProd) {
 
-    }
-    else {
-        config.devtool = 'eval-source-map';
+    } else {
+        config.devtool = 'source-map';
     }
 
     /**
@@ -46,7 +45,7 @@ module.exports = function makeWebpackConfig() {
      */
     config.output = {
         path: root('dist'),
-        publicPath: isProd ? '/' : 'http://localhost:8080/',
+        publicPath: isProd ? '/' : 'http://localhost:3000/',
         filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
         chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
     };
@@ -66,10 +65,9 @@ module.exports = function makeWebpackConfig() {
     }
 
     config.module = {
-        rules: [
-            {
+        rules: [{
                 test: /\.ts$/,
-                loaders: ['awesome-typescript-loader?' + atlOptions, 'angular2-template-loader', '@angularclass/hmr-loader'],
+                loaders: ['awesome-typescript-loader?' + atlOptions, 'angular2-template-loader', 'angular2-router', '@angularclass/hmr-loader'],
             },
 
             {
@@ -77,15 +75,22 @@ module.exports = function makeWebpackConfig() {
                 loader: 'file?name=fonts/[name].[hash].[ext]?'
             },
 
-            { test: /\.json$/, loader: 'json' },
             {
+                test: /\.json$/,
+                loader: 'json'
+            }, {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                loader: ExtractTextPlugin.extract({ fallbackLoader: 'to-string!style-loader', loader: ['css-loader?minimize', 'postcss'] })
-            },
-            // all css required in src/app files will be merged in js files
-            { test: /\.css$/, include: root('src', 'app'), loader: 'raw!postcss' },
-            { test: /\.html$/, loader: 'raw', exclude: root('src', 'public') }
+                loaders: [ExtractTextPlugin.extract(['style', 'css?minimize']), 'to-string', 'css?minimize', 'postcss']
+            }, {
+                test: /\.css$/,
+                include: root('src', 'app'),
+                loaders: ['raw', 'postcss']
+            }, {
+                test: /\.html$/,
+                loader: 'raw',
+                exclude: root('src', 'public')
+            }
         ]
     };
 
@@ -99,6 +104,9 @@ module.exports = function makeWebpackConfig() {
                 ENV: JSON.stringify(ENV)
             }
         }),
+        new CopyWebpackPlugin([{
+            from: root('src/public')
+        }]),
 
         // Workaround needed for angular 2 angular/angular#11580
         new webpack.ContextReplacementPlugin(
@@ -106,30 +114,68 @@ module.exports = function makeWebpackConfig() {
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
             root('./src') // location of your src
         ),
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                /**
+                 * Apply the tslint loader as pre/postLoader
+                 * Reference: https://github.com/wbuchwalter/tslint-loader
+                 */
+                tslint: {
+                    emitErrors: false,
+                    failOnHint: false
+                },
+                /**
+                 * Sass
+                 * Reference: https://github.com/jtangelder/sass-loader
+                 * Transforms .scss files to .css
+                 */
+                sassLoader: {
+                    //includePaths: [path.resolve(__dirname, "node_modules/foundation-sites/scss")]
+                },
+                /**
+                 * PostCSS
+                 * Reference: https://github.com/postcss/autoprefixer-core
+                 * Add vendor prefixes to your css
+                 */
+                postcss: [
+                    autoprefixer({
+                        browsers: ['last 2 version']
+                    })
+                ]
+            }
+        })
     ];
 
     if (!isProd) {
         config.plugins.push(new DashboardPlugin());
     }
 
-    if (!isTestWatch) {
-        config.plugins.push(
-            new ForkCheckerPlugin(),
-            new CommonsChunkPlugin({
-                name: ['app', 'vendor', 'polyfills']
-            }),
-            new HtmlWebpackPlugin({
-                template: './src/public/index.html',
-                chunksSortMode: 'dependency'
-            }),
-            new ExtractTextPlugin({ filename: 'css/[name].[hash].css', disable: !isProd })
-        );
-    }
+
+    config.plugins.push(
+        new ForkCheckerPlugin(),
+        new CommonsChunkPlugin({
+            name: ['app', 'vendor', 'polyfills']
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/public/index.html',
+            chunksSortMode: 'dependency'
+        }),
+        new ExtractTextPlugin({
+            filename: 'css/[name].[hash].css'
+        })
+    );
+
+
 
     if (isProd) {
         config.plugins.push(
             new webpack.NoErrorsPlugin(),
-            new webpack.optimize.UglifyJsPlugin({ sourceMap: false, mangle: { keep_fnames: true } }),
+            new webpack.optimize.UglifyJsPlugin({
+                sourceMap: false,
+                mangle: {
+                    keep_fnames: true
+                }
+            }),
             new CopyWebpackPlugin([{
                 from: root('src/public')
             }])
@@ -144,7 +190,7 @@ module.exports = function makeWebpackConfig() {
     };
 
     return config;
-} ();
+}();
 
 // Helper functions
 function root(args) {

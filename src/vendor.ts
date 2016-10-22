@@ -17,3 +17,4 @@ import 'ng2-dnd';
 import 'ng2-pagination';
 import 'ng2-modal';
 import 'ng2-datepicker/ng2-datepicker';
+import './style/app.css';

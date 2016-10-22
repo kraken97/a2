@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 
-import '../style/app.css';
+
+//  window.$ = window.jQuery = require('jquery');
 
 @Component({
     selector: 'body',

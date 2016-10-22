@@ -13,6 +13,7 @@ import { UserListComponent } from './admin/user/user-list/user-list.component';
 
 
 const appRoutes: Routes = [
+      { path: 'about', loadChildren: './+about/about.module#AboutModule' },
     {
         path: '',
         component: FullLayoutComponent,
