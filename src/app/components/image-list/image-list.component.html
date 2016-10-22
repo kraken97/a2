@@ -1,0 +1,28 @@
+<div class="gallery" dnd-sortable-container 
+      [sortableData]="entities">
+  <figure *ngFor="let e of entities; let i = index" dnd-sortable 
+          [sortableIndex]="i" >
+    <img src= "{{e[imageProperty]}}" >
+    <figcaption class="p-t-1 p-x-1">
+      <div *ngFor="let p of properties" [ngSwitch]="p">
+        <input-toggle [value]="e.visible" (valueChange)="e.visible=$event" *ngSwitchCase="'visible'">
+          visible
+        </input-toggle>
+        <input-date *ngSwitchCase="'date'"
+              [value]="e.date"
+              (valueChange)="e.date=$event">
+            date
+        </input-date>
+        <input-text *ngSwitchDefault 
+                  [value]="e[p]" 
+                  [type]="'text'"
+                  [alert]="'Field is required'" 
+                  [required]="true"
+                  (valueChange)="e[p]=$event" >
+          {{p}}
+        </input-text>
+      </div>
+      <button *ngIf="account.rights && account.rights.screenshots?.remove" type="button" class="btn btn-danger btn-md m-a-0 del" (click)="onDelete(e.id)"> x </button>
+    </figcaption>
+  </figure>
+</div>

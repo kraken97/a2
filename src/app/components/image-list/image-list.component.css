@@ -1,0 +1,28 @@
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+img {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+}
+figure {
+  width: 300px;
+  text-align: center;
+  border: 2px dashed #ccc;
+  padding: 5px;
+  position: relative;
+  margin: 5px;
+}
+.dnd-sortable-drag {
+    border: 2px black dashed!important;
+    background: #eceff1;
+    opacity: (.7);
+}
+button.del {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border-bottom-left-radius: 30px;
+}

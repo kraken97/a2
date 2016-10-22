@@ -1,0 +1,150 @@
+<div class="animated fadeIn">
+	<h4>{{title}}</h4>
+	<div class="card card-default">
+		<div class="card-header">
+			<div class="row m-a-0">
+				<div class="col-md-6">
+					<div *ngIf="account.rights">
+						<button *ngIf="account.rights[api]?.create" type="button" class="btn btn-success" (click)="history.go(urlService.getCreateUrl(api))">Create</button>
+						<button *ngIf="orderChanged && account.rights[api]?.update" (click)="onOrderSave()" type="button" class="btn btn-warning">Save changes</button>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="input-group">
+						<input type="text" #filter id="filter" name="input2-group2" class="form-control" placeholder="Property" [(ngModel)]="filterProp">
+						<span class="input-group-btn">
+                            <button type="button" class="btn btn-primary" (click)="getEntities()">Filter</button>
+                        </span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card-block">
+			<table class="table">
+				<thead>
+					<tr>
+						<td *ngFor="let prop of properties" >
+							<a class="sort unselectable" (click)="sort(prop)" >{{prop}}</a>
+							<div class="sort" *ngIf="prop.sortable">
+								<i class="order" *ngIf="(sortProp == prop && order == 'ASC')" class="icon-arrow-up icons font-2x2"></i>
+								<i class="order" *ngIf="(sortProp == prop && order == 'DESC')" class="icon-arrow-down icons font-2x2"></i>
+							</div>
+						</td>
+						<td *ngIf="account.rights && (account.rights[api]?.update || account.rights[api]?.remove)" style="width:300px">
+							actions
+						</td>
+					</tr>
+				</thead>
+				<tbody *ngIf="entities && sortable && paginated" [dropZones]="[api]" dnd-sortable-container [sortableData]="entities">
+					<tr *ngFor="let u of entities | paginate: { itemsPerPage: itemsPerPage, currentPage: page, totalItems: count }; let i = index"
+                         dnd-sortable [sortableIndex]="i"
+                         (onDropSuccess)="onOrderChange()" [ngClass]="{'active': (u.id===chosen)}">
+
+						<td *ngFor="let p of properties" [ngSwitch]="p" (click)="chosenEntity=u">
+							<img *ngSwitchCase="'imageUrl'" src="{{u[p]}}" style='width:200px;height:200px;object-fit:contain;'>
+							<div *ngSwitchDefault>
+                                <div [ngSwitch]="isArray(u[p])">
+                                    <p *ngSwitchCase="false">{{u[p]}}</p>
+                                    <ul *ngSwitchDefault>
+                                        <li *ngFor="let x of u[p]">{{x}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+						</td>
+						<td *ngIf="account.rights && (account.rights[api]?.update || account.rights[api]?.remove)">
+                            <button *ngIf="u.urlAlias" type="button" class="btn btn-default btn-md" (click)="openDemo(u.urlAlias)">View</button>
+							<button *ngIf="account.rights[api]?.update" type="button" class="btn btn-info btn-md" (click)="history.go(urlService.getEditUrl(api, u.id))">Edit</button>
+							<button *ngIf="account.rights[api]?.remove" type="button" class="btn btn-danger btn-md" (click)="onDelete(delModal, u.id)">Delete</button>
+						</td>
+					<tr>
+				</tbody>
+				<tbody *ngIf="entities && sortable && !paginated"  [dropZones]="[api]" dnd-sortable-container [sortableData]="entities">
+					<tr *ngFor="let u of entities; let i = index"
+                         dnd-sortable [sortableIndex]="i"
+                         (onDropSuccess)="onOrderChange()" [ngClass]="{'active': (u.id===chosen)}">
+
+						<td *ngFor="let p of properties" [ngSwitch]="p" (click)="chosenEntity=u">
+							<img *ngSwitchCase="'imageUrl'" src="{{u[p]}}" style='width:200px;height:200px;object-fit:contain;'>
+							<div *ngSwitchDefault>
+                                <div [ngSwitch]="isArray(u[p])">
+                                    <p *ngSwitchCase="false">{{u[p]}}</p>
+                                    <ul *ngSwitchDefault>
+                                        <li *ngFor="let x of u[p]">{{x}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+						</td>
+						<td *ngIf="account.rights && (account.rights[api]?.update || account.rights[api]?.remove)">
+                            <button *ngIf="u.urlAlias" type="button" class="btn btn-default btn-md" (click)="openDemo(u.urlAlias)">View</button>
+							<button *ngIf="account.rights[api]?.update" type="button" class="btn btn-info btn-md" (click)="history.go(urlService.getEditUrl(api, u.id))">Edit</button>
+							<button *ngIf="account.rights[api]?.remove" type="button" class="btn btn-danger btn-md" (click)="onDelete(delModal, u.id)">Delete</button>
+						</td>
+					<tr>
+				</tbody>
+				<tbody *ngIf="entities && !sortable && paginated">
+					<tr *ngFor="let u of entities | paginate: { itemsPerPage: itemsPerPage, currentPage: page, totalItems: count };" [ngClass]="{'active': (u.id===chosen)}">
+
+						<td *ngFor="let p of properties" [ngSwitch]="p" (click)="chosenEntity=u">
+							<img *ngSwitchCase="'imageUrl'" src="{{u[p]}}" style='width:200px;height:200px;object-fit:contain;'>
+							<div *ngSwitchDefault>
+                                <div [ngSwitch]="isArray(u[p])">
+                                    <p *ngSwitchCase="false">{{u[p]}}</p>
+                                    <ul *ngSwitchDefault>
+                                        <li *ngFor="let x of u[p]">{{x}}</li>
+                                    </ul>
+                    			</div>
+                            </div>
+						</td>
+						<td *ngIf="account.rights && (account.rights[api]?.update || account.rights[api]?.remove)">
+                            <button *ngIf="u.urlAlias" type="button" class="btn btn-default btn-md" (click)="openDemo(u.urlAlias)">View</button>
+							<button *ngIf="account.rights[api]?.update" type="button" class="btn btn-info btn-md"  (click)="history.go(urlService.getEditUrl(api, u.id))">Edit</button>
+							<button *ngIf="account.rights[api]?.remove" type="button" class="btn btn-danger btn-md" (click)="onDelete(delModal, u.id)">Delete</button>
+						</td>
+					<tr>
+				</tbody>
+                <tbody *ngIf="entities && !sortable && !paginated">
+					<tr *ngFor="let u of entities; let i = index" [ngClass]="{'active': (u.id===chosen)}">
+
+						<td *ngFor="let p of properties" [ngSwitch]="p" (click)="chosenEntity=u">
+							<img *ngSwitchCase="'imageUrl'" src="{{u[p]}}" style='width:200px;height:200px;object-fit:contain;'>
+							<div *ngSwitchDefault>
+                                <div [ngSwitch]="isArray(u[p])">
+                                    <p *ngSwitchCase="false">{{u[p]}}</p>
+                                    <ul *ngSwitchDefault>
+                                        <li *ngFor="let x of u[p]">{{x}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+						</td>
+						<td *ngIf="account.rights && (account.rights[api]?.update || account.rights[api]?.remove)">
+                            <button *ngIf="u.urlAlias" type="button" class="btn btn-default btn-md" (click)="openDemo(u.urlAlias)">View</button>
+							<button *ngIf="account.rights[api]?.update" type="button" class="btn btn-info btn-md" (click)="history.go(urlService.getEditUrl(api, u.id))">Edit</button>
+							<button *ngIf="account.rights[api]?.remove" type="button" class="btn btn-danger btn-md" (click)="onDelete(delModal, u.id)">Delete</button>
+						</td>
+					<tr>
+				</tbody>
+			</table>
+			<pagination-controls *ngIf="paginated && count && entities" (pageChange)="getPage($event)" style="display: inline-block;"></pagination-controls>
+			<div *ngIf="paginated" class="pull-right">
+				<button *ngFor="let opt of paginationOptions" type="button" class="btn btn-default btn-md" [ngClass]="{'btn-info': (itemsPerPage===opt)}"
+					(click)="itemsPerPage=opt; getEntities()">
+                        {{opt}}
+                </button>
+			</div>
+		</div>
+	</div>
+</div>
+<modal #delModal>
+	<modal-header>
+		<h1>Confirm delete</h1>
+	</modal-header>
+	<modal-content>
+		Do you really want to delete?
+	</modal-content>
+	<modal-footer>
+		<form (ngSubmit)="confirmDelete(delModal)">
+			<button type="submit" class="btn btn-danger btn-md">Delete</button>
+			<button type="button" class="btn btn-primary btn-md" (click)="delModal.close()">close</button>
+		</form>
+	</modal-footer>
+</modal>

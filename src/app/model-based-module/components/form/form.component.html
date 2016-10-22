@@ -1,0 +1,17 @@
+<div class="card-header">
+	{{formTitle}}
+</div>
+<div class="card-block">
+	<form (ngSubmit)="onSubmit()" [formGroup]="form">
+		<div *ngIf="errors" class="errors alert alert-danger">
+			{{errors|json}}
+		</div>
+		<div *ngFor="let question of questions" class="form-row">
+			<df-input [question]="question" [form]="form"></df-input>
+		</div>
+		<div class="form-row card-footer">
+			<button type="submit" [disabled]="!form.valid" class="btn btn-md btn-success"><i class="fa fa-check"></i> Save</button>
+			<button type="button" class="btn btn-md btn-warn " (click)="back.emit() "><i class="fa fa-back "></i> Back</button>
+		</div>
+	</form>
+</div>

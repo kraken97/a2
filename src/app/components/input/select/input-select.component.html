@@ -1,0 +1,12 @@
+<div *ngIf="_list" class="form-group row">
+  <label class="col-md-3 form-control-label">
+    <ng-content></ng-content>
+  </label>
+  <div class="col-md-9">
+    <select [formControl]="control" required>
+        <option [attr.value]="l.value" *ngFor="let l of _list">
+        {{l.title}}
+        </option>
+      </select>
+  </div>
+</div>

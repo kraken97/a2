@@ -1,0 +1,9 @@
+machine:
+  services:
+    - docker
+dependencies:
+  override:
+    - docker build -t node .
+test:
+  override:
+    - docker run -it node 

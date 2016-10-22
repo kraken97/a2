@@ -1,0 +1,46 @@
+thead {
+    font-weight: 600;
+}
+.input-group {
+    display: flex;
+    align-items: flex-end;
+}
+i.order:before {
+    position: absolute!important;
+    right: 0;
+    top: 50%;
+    margin: 0 5px;
+}
+div.sort {
+    position: relative;
+}
+a.sort {
+    cursor: pointer;
+}
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.card {
+    margin-top: 20px;
+}
+.btn {
+    margin: 0;
+}
+.dnd-sortable-drag {
+    border: 2px black dashed!important;
+    background: #eceff1;
+    /*transform: scale(.9);*/
+    opacity: (.7);
+}
+.btn-default {
+    border: 1px solid #cdcdcd;
+}
+.active {
+    background: powderblue;
+    transition: all 0.3s ease-out;
+}

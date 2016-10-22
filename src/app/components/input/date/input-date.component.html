@@ -1,0 +1,12 @@
+<div class="form-group row">
+    <label class="col-md-3 form-control-label">
+    <ng-content></ng-content>
+    </label>
+    <div class="col-md-9">
+    <input-datepicker 
+                    [(ngModel)]="ngModel"  
+                    [expanded]="true" 
+                    [viewFormat]="'D MMMM YYYY'"
+                    name="date"></input-datepicker>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="form-group row">
+  <label class="col-md-3 form-control-label">
+  <ng-content></ng-content>
+  </label>
+  <div class="col-md-9">
+    <input name="form" class="form-control" 
+          [attr.type]="type" 
+          [required]="required" 
+          [attr.placeholder]="placeholder"
+          [(ngModel)]="ngModel"
+          #name="ngModel">
+    <div [hidden]="name.valid||name.pristine" class="alert alert-danger">
+      {{alert}}
+    </div>
+  </div>
+</div>

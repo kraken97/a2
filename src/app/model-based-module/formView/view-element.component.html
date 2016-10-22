@@ -1,0 +1,16 @@
+<div [ngSwitch]="viewElementModel.viewType">
+
+	<generic-index 
+					*ngSwitchCase="'index'"
+					[parentId]="viewElementModel.parentId"
+					[compareProperty]="viewElementModel.compareProperty"
+					[api]="viewElementModel.api"
+					[title]="viewElementModel.title"
+					[properties]="viewElementModel.properties"
+					[paginated]="false"
+					[sortable]="true">
+	</generic-index>
+
+	<div *ngSwitchDefault>
+	</div>
+</div>

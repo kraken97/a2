@@ -1,0 +1,10 @@
+@import './css/style.css';
+@import './css/style-default.css';
+.upload {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+}
+a {
+    cursor: pointer;
+}

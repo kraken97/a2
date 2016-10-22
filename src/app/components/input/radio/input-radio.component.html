@@ -1,0 +1,16 @@
+<div class="form-group row">
+  <label class="col-md-3 form-control-label">
+    <ng-content></ng-content>
+  </label>
+  <div class="col-md-9">
+    <div *ngFor='let e of entities'> 
+        <input  type='radio' 
+                [disabled]='disabled'
+                id="{{e[valueProperty]}}" 
+                name='radiogroup' 
+                value='{{e[valueProperty]}}'
+                [(ngModel)]="chosen" />
+        <label [attr.for]='e[valueProperty]'>{{e[displayProperty]}}</label>
+    </div>
+  </div>
+</div>

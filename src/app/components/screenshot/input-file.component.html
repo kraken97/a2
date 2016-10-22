@@ -1,0 +1,16 @@
+<div class="form-group row">
+	<div *ngIf="errors" class="alert alert-danger">
+		{{errors|errorToString}}
+	</div>
+	<label class="col-md-3 form-control-label" for="file">
+            <ng-content></ng-content>
+          </label>
+	<div class="col-md-9">
+		<input type="file" (change)="handleUpload($event)" accept="image/gif, image/jpeg, image/png">
+		<button *ngIf="imageUrl" type="button" class="btn btn-sm btn-danger" (click)="reset()"><i class="fa fa-close"></i> Remove</button>
+	</div>
+</div>
+
+<div *ngIf="imageUrl">
+	<img class="upload" [src]="sanitizer.bypassSecurityTrustUrl(host+'/'+imageUrl)">
+</div>

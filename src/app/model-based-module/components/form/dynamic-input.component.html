@@ -1,0 +1,58 @@
+<div class="form-group row" [formGroup]="form" [style.display]="question.hidden?'none':'inherit'">
+	<label class="col-md-3 form-control-label">
+  {{question.label}}
+  </label>
+	<div class="col-md-9" [ngSwitch]="question.controlType">
+
+		<div class="" *ngSwitchCase="'datefield'">
+			<input [formControlName]="question.key" class="form-control" [id]="question.key" [type]="question.type" hidden>
+			<datepcker [formGroup]="form" [value]="question.value" [controlName]="question.key">
+			</datepcker>
+		</div>
+
+
+		<select [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key">
+			<option *ngFor="let opt of question.options;let i=index" [value]="opt.value"  [selected]="i===question.value">{{opt.key}}</option>	
+		</select>
+
+		<div class="" *ngSwitchCase="'input-image'">
+
+			<input-image [formGroup]="form" [imageType]="question.imageType" [value]="question.value" [controlName]="question.key">
+			</input-image>
+		</div>
+
+
+
+		<div *ngSwitchCase="'color-picker'">
+			<input class="form-control" [(colorPicker)]="value" [formControlName]="question.key" [id]="question.key" [style.background]="value">
+		</div>
+
+		<div  *ngSwitchCase="'checkbox-group'">
+				<checkbox [formGroup]="form" 
+									[options]="question.value"
+									[controlName]="question.key">
+				</checkbox>
+			<input [formControlName]="question.key" 
+						 class="form-control" 
+						 [id]="question.key" 
+						 [type]="question.type" hidden>
+		</div>
+	
+
+
+
+		<div class="checkbox" *ngSwitchCase="'checkbox'">
+			<label class="switch switch-3d switch-primary">
+                <input class="switch-input" type="checkbox"  [id]="question.key" [formControlName]="question.key" checked>
+                <span class="switch-label"></span>
+                <span class="switch-handle"></span>
+        </label>
+		</div>
+
+		<input *ngSwitchCase="'textbox'" [formControlName]="question.key" [placeholder]="question.placeholder" class="form-control"
+			[id]="question.key" [type]="question.type">
+		<div *ngIf="(!isValid)&&(isToched)" class="alert alert-danger">
+			{{form.controls[question.key].errors|errorToString}}
+		</div>
+	</div>
+</div>

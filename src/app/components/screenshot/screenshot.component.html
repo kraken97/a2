@@ -1,0 +1,62 @@
+<div class="card">
+  <div class="card-block">
+    
+    <image-list *ngIf="account.rights && account.rights.screenshots?.view && account.rights.screenshots?.update "
+              [entities]='screenshots' 
+              [properties]='properties' 
+              [imageProperty]="'imageUrl'" 
+              (delete)="onDelete($event)" >
+    </image-list>
+
+  </div>
+  <div class="card-block">
+    <form *ngIf="opened" (ngSubmit)="saveScreenshot()" #userForm="ngForm">
+      <input-radio *ngIf="isTypeSelectable"
+                  [disabled]="screenshot.imageUrl!==''"
+                  [entities]="screenshotTypes"
+                  (checked)="screenshot.screenshotMetadataId=$event">
+        Screenshot type
+      </input-radio>
+      <div *ngIf="screenshot" [ngSwitch]="screenshot.screenshotMetadataId">
+        
+
+        <input-date *ngIf="date"
+              [value]="screenshot.date"
+              (valueChange)="screenshot.date=$event">
+            Date
+        </input-date>
+        
+        <input-file *ngSwitchCase="3"
+                    [screenshotType]="3"
+                    (value)=" screenshot.imageUrl=$event">
+          Background Image
+        </input-file>
+        <input-file *ngSwitchDefault
+                    [screenshotType]="screenshot.screenshotMetadataId"
+                    (value)=" screenshot.imageUrl=$event">
+          Background Image
+        </input-file>
+      </div>
+      <input-toggle [value]="true" (valueChange)="screenshot.visible=$event">
+        Visibility
+      </input-toggle>
+      <input-text 
+                [placeholder]="'Enter name'" 
+                [value]="screenshot.imageUrl.split('/').pop()" 
+                [type]="'text'"
+                [alert]="'Name is required'" 
+                [required]="true"
+                (valueChange)="screenshot.name=$event" >
+        Name
+      </input-text>
+      <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i> Add</button>
+    </form>
+
+    <div class="" *ngIf="!opened && account.rights && account.rights.screenshots?.create">
+      <button class="btn btn-primary" (click)="opened=!opened">
+        Add new screenshot
+      </button>
+    </div>
+
+  </div>
+</div>
