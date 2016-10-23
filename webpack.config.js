@@ -36,7 +36,8 @@ module.exports = function makeWebpackConfig() {
     config.entry = {
         'polyfills': './src/polyfills.ts',
         'vendor': './src/vendor.ts',
-        'app': './src/main.ts' // our angular app
+        'app': './src/main.ts', // our angular app,
+        'hmr': 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000'
     };
 
     /**
@@ -44,10 +45,10 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/configuration.html#output
      */
     config.output = {
-        path: root('dist'),
-        publicPath: isProd ? '/' : 'http://localhost:3000/',
-        filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
-        chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
+        path: root('wwwroot/dist'),
+        publicPath: '/dist/',
+        filename: isProd ? 'js/[name].js' : 'js/[name].js',
+        chunkFilename: isProd ? '[id].chunk.js' : '[id].chunk.js'
     };
 
     /**
@@ -104,6 +105,7 @@ module.exports = function makeWebpackConfig() {
                 ENV: JSON.stringify(ENV)
             }
         }),
+        new webpack.HotModuleReplacementPlugin(),
         new CopyWebpackPlugin([{
             from: root('src/public')
         }]),

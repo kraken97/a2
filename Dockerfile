@@ -1,14 +1,13 @@
-FROM node:argon
-# Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+FROM microsoft/dotnet:latest
 
-# Install app dependencies
-COPY package.json /usr/src/app/
-RUN npm install
+COPY . /app
 
-# Bundle app source
-COPY . /usr/src/app
+WORKDIR /app
 
-EXPOSE 8080
-RUN  npm run build
+RUN ["dotnet", "restore"]
+
+RUN ["dotnet", "build"]
+
+EXPOSE 5000/tcp
+
+CMD ["dotnet", "run", "--server.urls", "http://*:5000"]
