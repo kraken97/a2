@@ -48,6 +48,9 @@ namespace WebApplicationBasic
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+             app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+                    HotModuleReplacement = true
+                });
             // app.UseCors("CorsPolicy");
             if (env.IsDevelopment())
             {

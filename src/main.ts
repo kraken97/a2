@@ -1,18 +1,22 @@
+import 'angular2-universal-polyfills/browser';
 import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { platformUniversalDynamic } from 'angular2-universal';
 import { AppModule } from './app/app.module';
+import 'ng2-datepicker/ng2-datepicker';
 
-// depending on the env mode, enable prod mode or add debugging modules
-if (process.env.ENV === 'build') {
-  enableProdMode();
-}
-
-export function main() {
-  return platformBrowserDynamic().bootstrapModule(AppModule);
-}
-
-if (document.readyState === 'complete') {
-  main();
+// Enable either Hot Module Reloading or production mode
+if (module['hot']) {
+    module['hot'].accept();
+    module['hot'].dispose(() => { platform.destroy(); });
 } else {
-  document.addEventListener('DOMContentLoaded', main);
+    enableProdMode();
+}
+
+// Boot the application, either now or when the DOM content is loaded
+const platform = platformUniversalDynamic();
+const bootApplication = () => { platform.bootstrapModule(AppModule); };
+if (document.readyState === 'complete') {
+    bootApplication();
+} else {
+    document.addEventListener('DOMContentLoaded', bootApplication);
 }
