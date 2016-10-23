@@ -1,4 +1,4 @@
-var isDevBuild = process.argv.indexOf('--env.prod') < 0;
+var isDevBuild = process.env.ASPNETCORE_ENVIRONMENT ==='Development';
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');

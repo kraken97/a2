@@ -3,18 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf node_modules doc wwwroot/dist && npm cache clean",
-    "clean-install": "npm run clean && npm install",
-    "clean-start": "npm run clean-install && npm start",
-    "watch": "webpack --watch --progress --profile",
-    "build:dev": "rimraf wwwroot/dist && webpack --progress --profile --bail",
-    "build": "rimraf wwwroot/dist &&env DEVMOD=prod webpack --progress --profile --bail",
-    "build:watch": "webpack-dashboard -- webpack    --colors   --hide-modules --watch",
-    "server": "webpack-dashboard -- webpack-dev-server  --inline --port 8080",
-    "lint": "tslint --force \"src/**/*.ts\"",
-    "start:dev": "npm run server",
-    "start:hmr": "npm run server -- --hot",
-    "explorer": "source-map-explorer ./wwwroot/dist/js/app.js   ./wwwroot/dist/js/app.js.map"
+
+    "start":"  env ASPNETCORE_ENVIRONMENT=Development  webpack --config ./webpack.vendor.js && env ASPNETCORE_ENVIRONMENT=Development dotnet run",
+    "start:prod":"  env ASPNETCORE_ENVIRONMENT=Production  webpack --config ./webpack.vendor.js && env ASPNETCORE_ENVIRONMENT=Production  webpack --config ./webpack.config.js &&env ASPNETCORE_ENVIRONMENT=Production dotnet run"
+
   },
   "dependencies": {
     "@angular/common": "^2.1.1",

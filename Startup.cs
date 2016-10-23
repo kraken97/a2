@@ -29,17 +29,6 @@ namespace WebApplicationBasic
         public void ConfigureServices(IServiceCollection services)
         {
 
-            // Add service and create Policy with options
-        //     services.AddCors(options =>
-        //     {
-        //         options.AddPolicy("CorsPolicy",
-        //             builder => builder.AllowAnyOrigin()
-        //             .AllowAnyMethod()
-        //             .AllowAnyHeader()
-        //             .AllowCredentials());
-        // // Add framework services.
-
-        //     });
             services.AddMvc();
         }
 
@@ -48,17 +37,16 @@ namespace WebApplicationBasic
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-             app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
-                    HotModuleReplacement = true
-                });
+
             // app.UseCors("CorsPolicy");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
-                   app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-            {
-            });
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
+                    HotModuleReplacement = true
+                });
             }
             else
             {
@@ -66,8 +54,8 @@ namespace WebApplicationBasic
             }
 
             app.UseStaticFiles();
-         
-    
+
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

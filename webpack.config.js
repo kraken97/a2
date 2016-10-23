@@ -1,4 +1,4 @@
-var isDevBuild = false
+var isDevBuild = process.env.ASPNETCORE_ENVIRONMENT ==='Development';
 var path = require('path');
 var webpack = require('webpack');
 var nodeExternals = require('webpack-node-externals');
@@ -38,11 +38,17 @@ var clientBundleConfig = merge(sharedConfig, {
         })
     ].concat(isDevBuild ? [
         // Plugins that apply in development builds only
+
         new webpack.SourceMapDevToolPlugin({
             filename: '[file].map', // Remove this line if you prefer inline source maps
             moduleFilenameTemplate: path.relative(clientBundleOutputDir, '[resourcePath]') // Point sourcemap entries to the original file locations on disk
         })
     ] : [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        }),
         // Plugins that apply in production builds only
         new webpack.optimize.OccurenceOrderPlugin(),
 
