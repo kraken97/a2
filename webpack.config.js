@@ -18,7 +18,7 @@ var ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 var ENV = process.env.npm_lifecycle_event;
 var isTestWatch = ENV === 'test-watch';
 var isTest = ENV === 'test' || isTestWatch;
-var isProd = process.env.DEVMODE === 'prod';
+var isProd = process.env.DEVMOD === 'prod';
 
 module.exports = function makeWebpackConfig() {
     var config = {};
@@ -36,8 +36,7 @@ module.exports = function makeWebpackConfig() {
     config.entry = {
         'polyfills': './src/polyfills.ts',
         'vendor': './src/vendor.ts',
-        'app': './src/main.ts', // our angular app,
-        'hmr': 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000'
+        'app': './src/main.ts'
     };
 
     /**

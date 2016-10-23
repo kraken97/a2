@@ -8,7 +8,7 @@
     "clean-start": "npm run clean-install && npm start",
     "watch": "webpack --watch --progress --profile",
     "build:dev": "rimraf wwwroot/dist && webpack --progress --profile --bail",
-    "build": "rimraf wwwroot/dist &&DEMOD=prod webpack --progress --profile --bail",
+    "build": "rimraf wwwroot/dist &&env DEVMOD=prod webpack --progress --profile --bail",
     "build:watch":"webpack-dashboard -- webpack    --colors   --hide-modules --watch",
     "server": "webpack-dashboard -- webpack-dev-server  --inline --port 8080",
     "lint": "tslint --force \"src/**/*.ts\"",
